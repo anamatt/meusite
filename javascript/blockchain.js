@@ -44,3 +44,27 @@ function buscaStatusContrato() {
         campoStatus.innerHTML = err;
     });
 }
+
+function finalizarContrato () {
+    contrato.fimDoContrato()
+    caixaStatusTx.innerHTML = "Enviando solicitação...";
+    .then( (transacao) => {
+        console.log("registrarFimContrato - Transacao ", transacao);   
+        caixaStatusTx.innerHTML = "Transação enviada. Aguardando processamento...";
+        transacao.wait()
+            .then( (resultado) => {
+                caixaStatusTx.innerHTML = "Transação realizada.";
+            })        
+            .catch( (err) => {
+                console.error("registrarFimContrato - Aguardando tx ser minerada");
+                console.error(err);
+                caixaStatusTx.innerHTML = "Algo saiu errado: " + err.message;
+            })
+        })
+    .catch( (err) => {
+        console.error("registrarFimContrato");
+        console.error(err);
+        caixaStatusTx.innerHTML = "Algo saiu errado: " + err.message;
+    })
+    }
+}
